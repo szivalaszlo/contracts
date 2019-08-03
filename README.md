@@ -2,14 +2,17 @@
 
 ## Spring boot with REST tutorial
 
+## Table of contents
+
+[Getting started](https://github.com/szivalaszlo/contracts#getting-started)
+
+
+
 ## Objective
 
 This tutorial covers a Spring boot project with REST API definition. The exercise is to build a web application in which multiple persons can have multiple contracts signed between them. This is a classic many to many relationship problem between the main entities.
 
 This tutorial will help you understand the basic concepts of database relationships, hibernate queries and Spring boot. 
-
-[Getting started](https://app.gitbook.com/@szivalaszlo/s/contracts-web-app/~/drafts/-LlIiIaBM5eigIxAZ7O9/primary/#getting-started)  
-
 
 ## Background and recommended online courses
 
