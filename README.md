@@ -4,7 +4,12 @@
 
 ## Table of contents
 
-[Getting started](https://github.com/szivalaszlo/contracts#getting-started)
+* [Objective](https://github.com/szivalaszlo/contracts#objective)
+* [Background and recommended online courses](https://github.com/szivalaszlo/contracts#background-and-recommended-online-courses)
+* [Recommended software setup with install tutorial links](https://github.com/szivalaszlo/contracts#recommended-software-setup-with-install-tutorial-links-linux)
+* [Getting started](https://github.com/szivalaszlo/contracts#getting-started)
+* [Laying out the database schema](https://github.com/szivalaszlo/contracts#laying-out-the-database-schema)
+* [Entity - basics](https://github.com/szivalaszlo/contracts#entity---basics)
 
 
 
