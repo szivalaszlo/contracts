@@ -61,7 +61,7 @@ For this simple project we are going to set a few dependencies in the pom.xml fi
 
 ![POM](https://i.imgur.com/IWFnl2i.png)
 
-See the actual pom.xml file for the additional dependencies with descriptive comments.
+See the actual [pom.xml](https://github.com/szivalaszlo/contracts/blob/master/pom.xml) file for the additional dependencies with descriptive comments.
 
 ## Laying out the database schema
 
@@ -71,13 +71,15 @@ By definition a contract can have one or more sellers and also one or more buyer
 
 A person can have many contactdetails defined. The seller\_contract and the buyer\_contract tables join the person and the contract. 
 
-I know that this **database design is not good**, because the same contract is referenced \(twice\) in the seller\_contract and buyer\_contract tables. Ideally there should be only one table at the top instead of this two. In this 'better' setup this alone table should be a reference table listing in one line the contract FK a seller FK and a buyer FK. Still I chose the current design because the current design allows for using the basic jointable approach. For this and other possible solutions to implement many-to-many read the following article.
+I know that this **database design is not good**, because the same contract is referenced \(twice\) in the seller\_contract and buyer\_contract tables. Ideally there should be only one table at the top instead of this two. In this 'better' setup this alone table should be a reference table listing in one line the contract FK a seller FK and a buyer FK. Still I chose the current design because the current design allows for using the basic jointable approach. Further read: 
 
 [Many-To-Many Relationship in JPA](https://www.baeldung.com/jpa-many-to-many)
 
 A person can have multiple contracts \(as buyer, or seller\) and also a contract can have multiple persons. This is a many-to-many relationship.
 
-I have used @ManyToMany, @JoinTable and @JoinColumn annotations to map the many-to-many association. See this [article](https://www.baeldung.com/hibernate-many-to-many) for details.
+I have used @ManyToMany, @JoinTable and @JoinColumn annotations to map the many-to-many association. Further read:
+
+[Hibernate Many to Many Annotation Tutorial](https://www.baeldung.com/hibernate-many-to-many)
 
 ### Creating and filling up tables
 
@@ -90,6 +92,8 @@ You may generate your dummy data using this [site](http://filldb.info/dummy).
 If you decide to use dummy data, the tables will be created by copy-pasting the code given by the online data generator. So that is pretty fast. 
 
 ## Entities
+
+[Link to code](https://github.com/szivalaszlo/contracts/tree/master/src/main/java/com/szivalaszlo/contracts/landon/data)
 
 Entities are POJOs used to persist data to the database. An entity represents a table and an entity instance a row of the table. If we look into the person table in the database, we see that we have _id_ as an integer, a bunch of string values and a date. The entity has to reflect the columns of the particular table. To map the entity and its variable to the table and the table columns, we us annotations. 
 
@@ -147,6 +151,16 @@ public class Person {
 Besides the Person we create a Contactedtails and a Contract entities. 
 
 After defining the Entities, the Repositories have to be created as well. I chose JpaRepository and I defined a couple of searches. 
+
+## Lazy loading and @Transactional
+
+In the entities' code you may have noticed the _fetch = FetchType.LAZY_ definition. What it does and why it is important. 
+
+When **eager** loading is used, associated data is loaded into the memory on the spot. In case of **lazy** loading the data will not be loaded until it is requested. 
+
+Looking at our Person entity, if a person is loaded with eager strategy then all of its contactdetails \(one to many\) will be loaded when the person itself is initialized. If lazy loading is enabled, contactdetails data will not be initialized and loaded into memory unless me we make a specific call to it. It does not sound a big deal with small amount of data, but as the database expands it can consume resources. 
+
+Further read: [Eager/Lazy Loading In Hibernate](https://www.baeldung.com/hibernate-lazy-eager-loading)
 
 
 
