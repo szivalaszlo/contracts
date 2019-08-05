@@ -160,7 +160,15 @@ When **eager** loading is used, associated data is loaded into the memory on the
 
 Looking at our Person entity, if a person is loaded with eager strategy then all of its contactdetails \(one to many\) will be loaded when the person itself is initialized. If lazy loading is enabled, contactdetails data will not be initialized and loaded into memory unless me we make a specific call to it. It does not sound a big deal with small amount of data, but as the database expands it can consume resources. 
 
-Further read: [Eager/Lazy Loading In Hibernate](https://www.baeldung.com/hibernate-lazy-eager-loading)
+During lazy loading to keep the transaction open we use the _@Transactional_ annotation. When we try to load the contactdetails of the person hibernate will look if a transaction is already open. If so, it will use it. This topic needs in depth exploration so I strongly recommend to consult at least the following articles. 
+
+Further reading: 
+
+* [Eager/Lazy Loading In Hibernate](https://www.baeldung.com/hibernate-lazy-eager-loading)
+* [Transaction propagation](https://docs.spring.io/spring/docs/current/spring-framework-reference/data-access.html#tx-propagation)
+* [Transaction rollback](https://dzone.com/articles/spring-transactional-amp-exceptions)
+
+
 
 
 
