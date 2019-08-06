@@ -168,7 +168,187 @@ Further reading:
 * [Transaction propagation](https://docs.spring.io/spring/docs/current/spring-framework-reference/data-access.html#tx-propagation)
 * [Transaction rollback](https://dzone.com/articles/spring-transactional-amp-exceptions)
 
+## Service Layer
+
+The service layer holds the business logic. This layer describes how and what data is read from and written into the database. 
+
+Let's look at the PersonService.java file. At first glance it is visible, that the createPerson\(\) method accepts a PersonForm object as input. Generally it is a good idea to not to expose Entity instances through the REST API. Therefore I decided to convert each Entity to a lighter object which does not contain link to other Entities, but its core properties. 
+
+For instance the PersonFromConverter turns a Person object into the lighter PersonFrom object.
+
+```java
+public class PersonFormConverter {
+
+    private static Logger logger = LogManager.getLogger();
+
+    private Person person;
+    private PersonForm personForm;
+    private List<Person> persons;
+    private List<PersonForm> personForms;
+
+    public PersonFormConverter(Person person) {
+        this.person = person;
+        personForm = new PersonForm();
+        setAllAttributesOnPersonForm();
+    }
+
+    public PersonFormConverter(List<Person> persons) {
+        this.persons = persons;
+        personForms = new ArrayList<>();
+        setAllAttributesOnEveryPersonForms();
+    }
+
+    private void setAllAttributesOnPersonForm() {
+        personForm.setId(Integer.toString(person.getId()));
+        personForm.setFirstName(person.getFirstName());
+        personForm.setLastName(person.getLastName());
+        personForm.setDateOfBirth(person.getDateOfBirth().toString());
+        personForm.setFirstNameMother(person.getFirstNameMother());
+        personForm.setLastNameMother(person.getLastNameMother());
+    }
+
+    private void setAllAttributesOnEveryPersonForms() {
+        for (Person currentPerson : persons) {
+            personForms.add(new PersonFormConverter(currentPerson).getPersonFormInstance());
+        }
+    }
+
+    public PersonForm getPersonFormInstance() {
+        return personForm;
+    }
+
+    public List<PersonForm> getPersonFormList() {
+        return personForms;
+    }
+}
+```
+
+The PersonFrom.java follows.
+
+```java
+public class PersonForm {
+    private String id;
+
+    @NotNull
+    @Size(min = 2, max = 30)
+    private String firstName;
+
+    @NotNull
+    @Size(min = 2, max = 30)
+    private String lastName;
+
+    @DateFormatConstraint //custom annotation
+    @DateInPastConstraint //custom annotation
+    @NotNull
+    private String dateOfBirth;
+
+    @NotNull
+    @Size(min = 2, max = 30)
+    private String firstNameMother;
+
+    @NotNull
+    @Size(min = 2, max = 30)
+    private String lastNameMother;
+
+    private List<ContactdetailsForm> contactDetails;
+
+    public PersonForm() {
+    }
+
+    public PersonForm(String id, String firstName, String lastName, String dateOfBirth, String firstNameMother, String lastNameMother) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+        this.firstNameMother = firstNameMother;
+        this.lastNameMother = lastNameMother;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public void setFirstNameMother(String firstNameMother) {
+        this.firstNameMother = firstNameMother;
+    }
+
+    public void setLastNameMother(String lastNameMother) {
+        this.lastNameMother = lastNameMother;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public String getFirstNameMother() {
+        return firstNameMother;
+    }
+
+    public String getLastNameMother() {
+        return lastNameMother;
+    }
+
+    public Map<String, Object> extractAllFields() {
+        Map<String, Object> allFields = new HashMap<>();
+        allFields.put("firstName", firstName);
+        allFields.put("lastName", lastName);
+        allFields.put("dateOfBirth", dateOfBirth);
+        allFields.put("firstNameMother", firstNameMother);
+        allFields.put("lastNameMother", lastNameMother);
+        return allFields;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (!(obj instanceof PersonForm))
+            return false;
+        if (obj == this)
+            return true;
+        return Objects.equals(this.getId(), ((PersonForm) obj).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
 
-
+    @Override
+    public String toString() {
+        return "PersonForm{" +
+                "id='" + id + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth='" + dateOfBirth + '\'' +
+                ", firstNameMother='" + firstNameMother + '\'' +
+                ", lastNameMother='" + lastNameMother + '\'' +
+                '}';
+    }
+}
+```
 
