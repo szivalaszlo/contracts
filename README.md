@@ -9,7 +9,11 @@
 * [Recommended software setup with install tutorial links](https://github.com/szivalaszlo/contracts#recommended-software-setup-with-install-tutorial-links-linux)
 * [Getting started](https://github.com/szivalaszlo/contracts#getting-started)
 * [Laying out the database schema](https://github.com/szivalaszlo/contracts#laying-out-the-database-schema)
-* [Entities](https://github.com/szivalaszlo/contracts#entity---basics)
+* [Entities](https://github.com/szivalaszlo/contracts#entities)
+* [Lazy loading and @Transactional](https://github.com/szivalaszlo/contracts#lazy-loading-and-transactional)
+* [Service Layer](https://github.com/szivalaszlo/contracts#service-layer)
+
+\*\*\*\*
 
 
 
